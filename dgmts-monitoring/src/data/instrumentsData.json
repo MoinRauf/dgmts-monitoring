@@ -1,0 +1,5 @@
+[
+    { "id": 1, "name": "Strain Gauge", "type": "Sensor", "lastCalibrated": "2024-12-01" },
+    { "id": 2, "name": "Inclinometer", "type": "Slope Monitoring", "lastCalibrated": "2024-11-15" },
+    { "id": 3, "name": "Piezometer", "type": "Water Pressure", "lastCalibrated": "2024-10-20" }
+  ]

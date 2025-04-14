@@ -1,0 +1,5 @@
+[
+    { "id": 1, "message": "High Vibration Detected", "severity": "Critical", "timestamp": "2025-04-14 08:30:00" },
+    { "id": 2, "message": "Temperature Exceeded Limit", "severity": "Warning", "timestamp": "2025-04-14 09:15:00" },
+    { "id": 3, "message": "Pressure Drop", "severity": "Info", "timestamp": "2025-04-14 10:00:00" }
+  ]
