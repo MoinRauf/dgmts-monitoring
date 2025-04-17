@@ -1,45 +1,60 @@
 import React from 'react';
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
-import logo from '../assets/logo.jpg';
+// import Navbar from '../components/Navbar';
+import HeaNavLogo from "../components/HeaNavLogo";
+import { useNavigate } from 'react-router-dom';
 import projectsData from '../data/projectsData.json';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+} from '@mui/material';
 
 const Projects: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleShowData = (project: any) => {
+    navigate('/instruments', { state: { project } });
+  };
+
   return (
-    <div className="page">
-      <Header />
-      <Navbar />
-      <div className="content">
-        <h2>
-        Welcome to Dulles Geotechnical Monitoring and Telemetry Solutions</h2>
-        <div className="data-list">
-          <h3>Project List</h3>
-          <ul>
-            {projectsData.map((project) => (
-              <li key={project.id}>
-                {project.name} - Status: {project.status} (Started: {project.startDate})
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="centered-logo">
-        <img
-            src={logo}
-            alt="DGMTS Logo"
-            style={{
-              position: "fixed",
-              top: "65%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "30vw",
-              opacity: 0.1,
-              zIndex: -1,
-              pointerEvents: "none",
-            }}
-          />
-        </div>
+    <div>
+      <HeaNavLogo />
+      <h2 style={{ textAlign: 'center', marginTop: '20px' }}>Project List</h2>
+      
+      {/* Centering the table */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <TableContainer component={Paper} style={{ maxWidth: '90%' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Project Name</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Start Date</TableCell>
+                <TableCell>Show Data</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {projectsData.map((project) => (
+                <TableRow key={project.id}>
+                  <TableCell>{project.name}</TableCell>
+                  <TableCell>{project.status}</TableCell>
+                  <TableCell>{project.startDate}</TableCell>
+                  <TableCell>
+                    <Button variant="outlined" onClick={() => handleShowData(project)}>
+                      Show Data
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
-      <footer>© 2025 DGMTS. All rights reserved.</footer>
     </div>
   );
 };

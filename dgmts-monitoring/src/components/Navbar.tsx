@@ -12,6 +12,7 @@ const Navbar: React.FC = () => {
       <Link to="/file-manager">File Manager</Link>
       <Link to="/export-data">Export Data</Link>
       <Link to="/help">Help?</Link>
+      <Link to="/ProjectForm">Form</Link>
     </nav>
   );
 };

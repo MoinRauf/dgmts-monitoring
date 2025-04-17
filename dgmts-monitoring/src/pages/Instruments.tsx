@@ -4,25 +4,47 @@ import Navbar from '../components/Navbar';
 import logo from '../assets/logo.jpg';
 import instrumentsData from '../data/instrumentsData.json';
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material';
+
 const Instruments: React.FC = () => {
   return (
     <div className="page">
       <Header />
       <Navbar />
-      <div className="content">
+      <div className="content" style={{ padding: '2rem' }}>
         <h2>Instruments</h2>
-        <div className="data-list">
-          <h3>Instrument List</h3>
-          <ul>
-            {instrumentsData.map((instrument) => (
-              <li key={instrument.id}>
-                {instrument.name} - Type: {instrument.type} (Last Calibrated: {instrument.lastCalibrated})
-              </li>
-            ))}
-          </ul>
-        </div>
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>Instrument Name</strong></TableCell>
+                <TableCell><strong>Type</strong></TableCell>
+                <TableCell><strong>Last Calibrated</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {instrumentsData.map((instrument) => (
+                <TableRow key={instrument.id}>
+                  <TableCell>{instrument.name}</TableCell>
+                  <TableCell>{instrument.type}</TableCell>
+                  <TableCell>{instrument.lastCalibrated}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
         <div className="centered-logo">
-        <img
+          <img
             src={logo}
             alt="DGMTS Logo"
             style={{

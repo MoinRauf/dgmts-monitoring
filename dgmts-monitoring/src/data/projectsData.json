@@ -1,5 +1,14 @@
 [
-    { "id": 1, "name": "Highway Expansion Project", "status": "In Progress", "startDate": "2024-01-15" },
-    { "id": 2, "name": "Bridge Reinforcement", "status": "Completed", "startDate": "2023-06-10" },
-    { "id": 3, "name": "Tunnel Monitoring", "status": "Planning", "startDate": "2025-03-01" }
-  ]
+  { "id": 1, "name": "Highway Expansion Project", "status": "In Progress", "startDate": "2024-01-15" },
+  { "id": 2, "name": "Bridge Reinforcement", "status": "Completed", "startDate": "2023-06-10" },
+  { "id": 3, "name": "Tunnel Monitoring", "status": "Planning", "startDate": "2025-03-01" },
+  { "id": 4, "name": "Railway Electrification", "status": "In Progress", "startDate": "2024-07-20" },
+  { "id": 5, "name": "Coastal Road Development", "status": "Not Started", "startDate": "2025-01-10" },
+  { "id": 6, "name": "Airport Runway Expansion", "status": "Completed", "startDate": "2022-12-05" },
+  { "id": 7, "name": "Metro Line Construction", "status": "In Progress", "startDate": "2024-04-18" },
+  { "id": 8, "name": "Smart Traffic System", "status": "Planning", "startDate": "2025-02-14" },
+  { "id": 9, "name": "Water Pipeline Replacement", "status": "Completed", "startDate": "2023-11-22" },
+  { "id": 10, "name": "Seismic Retrofit of Buildings", "status": "In Progress", "startDate": "2024-09-12" },
+  { "id": 11, "name": "Wind Farm Infrastructure", "status": "Not Started", "startDate": "2025-05-05" },
+  { "id": 12, "name": "Hydroelectric Plant Upgrade", "status": "Planning", "startDate": "2025-06-30" }
+]
