@@ -27,7 +27,7 @@ const SignIn: React.FC = () => {
     // Hardcoded admin login
     if (email === "admin@gmail.com" && password === "adminadmin") {
       toast.success("Admin login successful!");
-      setTimeout(() => navigate("/Dashboard"), 2000); // Redirect admin to dashboard
+      setTimeout(() => navigate("/projects"), 2000); // Redirect admin to dashboard
       return;
     }
 
@@ -41,7 +41,7 @@ const SignIn: React.FC = () => {
 
     if (user) {
       toast.success("Login successful!");
-      setTimeout(() => navigate("/projects"), 2000); // Redirect normal user
+      // setTimeout(() => navigate("/projects"), 2000); // Redirect normal user
     } else {
       toast.error("Invalid email or password!");
     }

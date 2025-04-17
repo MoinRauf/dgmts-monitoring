@@ -4,13 +4,27 @@ import Navbar from "../components/Navbar";
 import logo from "../assets/logo.jpg";
 import alarmsData from "../data/alarmsData.json";
 
+// Properly typed Alarm object with an index signature for dynamic key access
+type Alarm = {
+  timestamp: string;
+  sensor: string;
+  limit: string;
+  equation: string;
+  value: number;
+  acknowledged: boolean;
+  acknowledgedTimestamp: string | null;
+  user: string | null;
+  comment: string;
+  [key: string]: string | number | boolean | null | undefined;
+};
+
 const Alarms: React.FC = () => {
   const [filterAck, setFilterAck] = useState(true);
 
   // Get unique list of all keys from the data
   const allKeys = useMemo(() => {
     const keys = new Set<string>();
-    alarmsData.forEach((alarm) => {
+    alarmsData.forEach((alarm: Alarm) => {
       Object.keys(alarm).forEach((key) => keys.add(key));
     });
     return Array.from(keys);
@@ -18,7 +32,9 @@ const Alarms: React.FC = () => {
 
   // Filter the data based on acknowledgment status
   const filteredData = useMemo(() => {
-    return alarmsData.filter((alarm) => alarm.acknowledged === filterAck);
+    return alarmsData.filter(
+      (alarm: Alarm) => alarm.acknowledged === filterAck
+    );
   }, [filterAck]);
 
   return (
@@ -30,7 +46,6 @@ const Alarms: React.FC = () => {
 
         {/* Dropdown to toggle acknowledged/unacknowledged */}
         <div style={{ marginBottom: "1rem" }}>
-          {/* <label htmlFor="ackFilter">Filter by Acknowledgment: </label> */}
           <select
             id="ackFilter"
             value={filterAck ? "true" : "false"}
@@ -70,7 +85,7 @@ const Alarms: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map((alarm, idx) => (
+              {filteredData.map((alarm: Alarm, idx) => (
                 <tr key={idx}>
                   {allKeys.map((key) => (
                     <td
