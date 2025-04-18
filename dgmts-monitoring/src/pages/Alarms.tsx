@@ -37,11 +37,18 @@ const Alarms: React.FC = () => {
     );
   }, [filterAck]);
 
+  // Update headers and data key mappings
+  const updatedKeys = allKeys.map((key) => {
+    if (key === "acknowledged") return "Confirmed";
+    if (key === "acknowledgedTimestamp") return "Timestamp";
+    return key;
+  });
+
   return (
     <div className="page">
       <Header />
       <Navbar />
-      <div className="content">
+      <div className="content" style={{ padding: "2rem" }}>
         <h2>Alarms</h2>
 
         {/* Dropdown to toggle acknowledged/unacknowledged */}
@@ -50,9 +57,19 @@ const Alarms: React.FC = () => {
             id="ackFilter"
             value={filterAck ? "true" : "false"}
             onChange={(e) => setFilterAck(e.target.value === "true")}
+            style={{
+              padding: "10px",
+              fontSize: "16px",
+              border: "1px solid #000",  // Black border
+              borderRadius: "4px",
+              backgroundColor: "#fff",
+              width: "200px",
+              outline: "none",
+              boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+            }}
           >
-            <option value="true">Acknowledged</option>
-            <option value="false">Not Acknowledged</option>
+            <option value="true">Confirmed</option>
+            <option value="false">Not Confirmed</option>
           </select>
         </div>
 
@@ -67,14 +84,16 @@ const Alarms: React.FC = () => {
           >
             <thead>
               <tr>
-                {allKeys.map((key) => (
+                {updatedKeys.map((key) => (
                   <th
                     key={key}
                     style={{
-                      border: "1px solid #ddd",
-                      padding: "10px",
-                      backgroundColor: "#f2f2f2",
+                      border: "1px solid #000",  // Black border for header cells
+                      padding: "12px",
+                      backgroundColor: "#f4f4f4",
+                      color: "#333",
                       textAlign: "left",
+                      fontWeight: "bold",
                       wordWrap: "break-word",
                       maxWidth: "200px",
                     }}
@@ -86,13 +105,24 @@ const Alarms: React.FC = () => {
             </thead>
             <tbody>
               {filteredData.map((alarm: Alarm, idx) => (
-                <tr key={idx}>
-                  {allKeys.map((key) => (
+                <tr
+                  key={idx}
+                  style={{
+                    transition: "background-color 0.3s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#f0f0f0";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "#fff";
+                  }}
+                >
+                  {updatedKeys.map((key) => (
                     <td
                       key={key}
                       style={{
-                        border: "1px solid #ddd",
-                        padding: "10px",
+                        border: "1px solid #000",  // Black border for table cells
+                        padding: "12px",
                         textAlign: "left",
                         wordWrap: "break-word",
                         maxWidth: "200px",

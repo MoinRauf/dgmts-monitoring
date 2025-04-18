@@ -6,8 +6,8 @@
     "equation": "VALUE > 0.3",
     "value": 2.645,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -17,8 +17,8 @@
     "equation": "VALUE > 0.3",
     "value": 1.668,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -28,8 +28,8 @@
     "equation": "VALUE > 0.3",
     "value": 2.924,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -39,8 +39,8 @@
     "equation": "VALUE > 0.3",
     "value": 2.645,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -50,8 +50,8 @@
     "equation": "VALUE > 0.3",
     "value": 1.668,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -61,8 +61,8 @@
     "equation": "VALUE > 0.3",
     "value": 2.924,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -72,8 +72,8 @@
     "equation": "VALUE > 0.3",
     "value": 3.008,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -83,8 +83,8 @@
     "equation": "VALUE > 0.3",
     "value": 3.008,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -94,8 +94,8 @@
     "equation": "VALUE > 0.3",
     "value": 1.732,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {
@@ -105,8 +105,8 @@
     "equation": "VALUE > 0.3",
     "value": 0.567,
     "acknowledged": false,
-    "acknowledgedTimestamp": null,
-    "user": null,
+    "acknowledgedTimestamp": "N/A",
+    "user": "N/A",
     "comment": "No comment"
   },
   {

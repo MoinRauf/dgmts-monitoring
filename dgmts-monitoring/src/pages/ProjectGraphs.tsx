@@ -1,12 +1,9 @@
 import React from "react";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
-import LineGraph from "../components/LineGraph";
-import PressureGraph from "../components/PressureGraph";
+import LineGraph from "../pages/LineGraph";
 import logo from "../assets/logo.jpg";
 
-// import Logo from '../components/Logo';
-// import Logo from '../components/Logo';
 
 
 const ProjectGraphs: React.FC = () => {
@@ -19,7 +16,6 @@ const ProjectGraphs: React.FC = () => {
         <div className="graph-row">
           <LineGraph />
           <div style={{ width: "5px" }}></div> {/* 5px gap */}
-          <PressureGraph />
         </div>
         <div className="centered-logo">
           <img
@@ -44,5 +40,3 @@ const ProjectGraphs: React.FC = () => {
 };
 
 export default ProjectGraphs;
-
-

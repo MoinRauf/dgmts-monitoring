@@ -36,10 +36,10 @@ const Header: React.FC = () => {
             marginTop: "-5px", // Pull the text closer to the logo
           }}
         >
-          <span style={{ color: "#4285F4", fontWeight: "bold" }}>DGMTS—</span>
-          <span style={{ fontStyle: "italic", color: "#888" }}>
+          <span style={{ color: "Black", fontWeight: "bold" }}>DGMTS-imSite</span>
+          {/* <span style={{ fontStyle: "italic", color: "#888" }}>
             Instrumentation Monitoring Site
-          </span>
+          </span> */}
         </div>
       </div>
 
