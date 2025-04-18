@@ -12,54 +12,47 @@ import Navbar from '../components/Navbar';
 import logo from "../assets/logo.jpg";
 import fullData from '../data/customGraphData.json';
 
-// Define the data structure for the graph data
 interface GraphData {
   time: string;
   temperature: number;
+  humidity: number;
+  pressure: number;
+  oxygenLevel?: number; // ✅ Made optional to fix type error
 }
+
+const sensorOptions = ['temperature', 'humidity', 'pressure'] as const;
+type SensorType = typeof sensorOptions[number];
 
 const ViewCustomGraphs: React.FC = () => {
   const [startDate, setStartDate] = useState('2025-04-01');
   const [endDate, setEndDate] = useState('2025-04-09');
-  const [filteredData, setFilteredData] = useState<GraphData[]>([]); // Use the GraphData type
+  const [selectedSensor, setSelectedSensor] = useState<SensorType>('temperature');
+  const [filteredData, setFilteredData] = useState<GraphData[]>([]);
   const chartRef = useRef<HTMLDivElement | null>(null);
-
-  // Get today's date in the format YYYY-MM-DD
-  const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
     const alertShown = sessionStorage.getItem('alertShown');
-    if (!alertShown) {
-      fullData.forEach((data: GraphData) => { // Specify GraphData type here
+    if (!alertShown && selectedSensor === 'temperature') {
+      fullData.forEach((data: GraphData) => {
         if (data.temperature > 100) {
-          toast.error(`Alert: Temperature ${data.temperature} at ${data.time} exceeds 100!`, {
-            position: 'top-right',
-            autoClose: 5000,
-          });
+          toast.error(`Alert: Temperature ${data.temperature} at ${data.time} exceeds 100!`);
         }
       });
       sessionStorage.setItem('alertShown', 'true');
     }
-  }, []);
+  }, [selectedSensor]);
 
   const handleDateChange = () => {
-    const filtered = fullData.filter((data: GraphData) => { // Specify GraphData type here
+    const filtered = (fullData as GraphData[]).filter((data) => {
       const dataDate = new Date(data.time);
       return dataDate >= new Date(startDate) && dataDate <= new Date(endDate);
     });
     setFilteredData(filtered);
 
-    // Show success toast after data is filtered and graph is generated
     if (filtered.length > 0) {
-      toast.success('Graph generated successfully!', {
-        position: 'top-right',
-        autoClose: 5000,
-      });
+      toast.success('Graph generated successfully!');
     } else {
-      toast.warning('No data found for the selected date range.', {
-        position: 'top-right',
-        autoClose: 5000,
-      });
+      toast.warning('No data found for the selected date range.');
     }
   };
 
@@ -78,102 +71,128 @@ const ViewCustomGraphs: React.FC = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'GraphData');
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array',
-    });
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const fileData = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(fileData, 'graph-data.xlsx');
   };
 
+  const inputStyle = {
+    padding: '0.5rem',
+    borderRadius: '8px',
+    border: '1px solid #ccc',
+    fontSize: '1rem',
+    minWidth: '160px',
+  };
+
+  const labelStyle = {
+    display: 'block',
+    marginBottom: '0.3rem',
+    fontWeight: 600,
+  };
+
+  const buttonStyle = {
+    backgroundColor: '#007bff',
+    color: 'white',
+    border: 'none',
+    padding: '0.6rem 1.2rem',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+    marginTop: '1.8rem',
+    minWidth: '160px',
+  };
+
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '1rem' }}>
+    <div style={{ fontFamily: 'Segoe UI, sans-serif', padding: '2rem', backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
       <Header />
       <Navbar />
 
-      <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>View Custom Graphs</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#343a40' }}>📊 View Custom Graphs</h2>
 
-      {/* Date Filters */}
-      <div style={{ display: "flex", gap: "1rem", justifyContent: 'center', marginBottom: "1rem" }}>
+      <div style={{
+        display: "flex",
+        flexWrap: 'wrap',
+        justifyContent: "center",
+        gap: "1.5rem",
+        marginBottom: "2rem",
+        backgroundColor: '#fff',
+        padding: '2rem',
+        borderRadius: '16px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+      }}>
         <div>
-          <label style={{ display: 'block' }}>Start Date:</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            min="2025-01-01"
-            max={today} // Set max to today's date
-          />
+          <label style={labelStyle}>Start Date</label>
+          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={inputStyle} />
         </div>
         <div>
-          <label style={{ display: 'block' }}>End Date:</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            min="2025-01-01"
-            max={today} // Set max to today's date
-          />
+          <label style={labelStyle}>End Date</label>
+          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} style={inputStyle} />
         </div>
-        <button 
-          onClick={handleDateChange} 
-          style={{ padding: '0.5rem 1rem', marginLeft: '10px' }}
-        >
-          Generate Graph
-        </button>
+        <div>
+          <label style={labelStyle}>Sensor</label>
+          <select value={selectedSensor} onChange={(e) => setSelectedSensor(e.target.value as SensorType)} style={inputStyle}>
+            {sensorOptions.map((sensor) => (
+              <option key={sensor} value={sensor}>
+                {sensor.charAt(0).toUpperCase() + sensor.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button onClick={handleDateChange} style={buttonStyle}>Generate Graph</button>
       </div>
 
-      {/* Action Buttons */}
       <div style={{ textAlign: "center", marginBottom: "1rem" }}>
-        <button onClick={downloadGraph} style={{ marginRight: "10px", padding: '0.5rem 1rem' }}>
-          📷 Download Graph as Image
+        <button onClick={downloadGraph} style={{ ...buttonStyle, backgroundColor: '#28a745', marginRight: '1rem' }}>
+          📷 Download Image
         </button>
-        <button onClick={exportToExcel} style={{ padding: '0.5rem 1rem' }}>
-          📁 Export Data to Excel
+        <button onClick={exportToExcel} style={{ ...buttonStyle, backgroundColor: '#17a2b8' }}>
+          📁 Export to Excel
         </button>
       </div>
 
-      {/* Line Graph */}
-      <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <h3>Temperature Data Over Time</h3>
+      <div style={{
+        margin: '0 auto',
+        backgroundColor: '#fff',
+        padding: '2rem',
+        borderRadius: '16px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        maxWidth: '750px',
+        textAlign: 'center',
+      }}>
+        <h3 style={{ marginBottom: '1rem', color: '#343a40' }}>
+          {selectedSensor.charAt(0).toUpperCase() + selectedSensor.slice(1)} Graph
+        </h3>
         {filteredData.length === 0 ? (
-          <p>No data available for selected date range.</p>
+          <p>No data found for the selected range.</p>
         ) : (
-          <div ref={chartRef} style={{ display: 'flex', justifyContent: 'center' }}>
-            <LineChart
-              width={600}
-              height={300}
-              data={filteredData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
+          <div ref={chartRef}>
+            <LineChart width={600} height={300} data={filteredData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="time" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="temperature" stroke="#ff7300" activeDot={{ r: 8 }} />
+              <Line type="monotone" dataKey={selectedSensor} stroke="#ff7300" activeDot={{ r: 8 }} />
             </LineChart>
           </div>
         )}
       </div>
 
-      {/* Background Logo */}
       <img
         src={logo}
-        alt="DGMTS Logo"
+        alt="Logo"
         style={{
           position: "fixed",
-          top: "65%",
+          top: "70%",
           left: "50%",
           transform: "translate(-50%, -50%)",
           width: "30vw",
-          opacity: 0.1,
+          opacity: 0.06,
           zIndex: -1,
-          pointerEvents: "none",
         }}
       />
 
-      <footer style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.9rem", color: "#888" }}>
+      <footer style={{ textAlign: "center", marginTop: "2rem", fontSize: "0.9rem", color: "#aaa" }}>
         © 2025 DGMTS. All rights reserved.
       </footer>
 
