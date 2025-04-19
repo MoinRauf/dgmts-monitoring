@@ -196,7 +196,9 @@ const ProjectForm: React.FC = () => {
               type="email"
               placeholder="Email"
               value={newUser.email}
-              onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+              onChange={(e) =>
+                setNewUser({ ...newUser, email: e.target.value })
+              }
             />
             <button style={styles.submitBtn} onClick={handleAddUser}>
               Add User
@@ -283,7 +285,7 @@ const ProjectForm: React.FC = () => {
           </div>
         </div>
 
-        <button style={styles.submitBtn} onClick={handleSubmit}>
+        <button style={styles.submitBtnn} onClick={handleSubmit}>
           Submit Project
         </button>
       </div>
@@ -324,6 +326,19 @@ const styles: { [key: string]: React.CSSProperties } = {
     borderRadius: "5px",
     border: "1px solid #ccc",
     fontSize: "16px",
+  },
+  submitBtnn: {
+    backgroundColor: "#4CAF50",
+    color: "white",
+    padding: "12px 20px",
+    borderRadius: "5px",
+    border: "none",
+    fontSize: "16px",
+    cursor: "pointer",
+    marginLeft: "auto", // This will apply margin to the left and push the button to the center
+    marginRight: "auto", // This ensures it's also centered by making the right margin equal
+    display: "block", // Ensures the button takes a block layout, allowing margins to work
+    width: "200px", // Op},
   },
   submitBtn: {
     backgroundColor: "#4CAF50",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
+// import Header from '../components/Header';
+// import Navbar from '../components/Navbar';
 import logo from '../assets/logo.jpg';
 import instrumentsData from '../data/instrumentsData.json';
 import {
@@ -13,6 +13,7 @@ import {
   TableRow,
   Paper
 } from '@mui/material';
+import HeaNavLogo from '../components/HeaNavLogo';
 
 const Instruments: React.FC = () => {
   const location = useLocation();
@@ -25,9 +26,11 @@ const Instruments: React.FC = () => {
     : [];
 
   return (
+    <>
+    <HeaNavLogo/>
     <div className="page">
-      <Header />
-      <Navbar />
+      {/* <Header />
+      <Navbar /> */}
       <div className="content" style={{ padding: '2rem' }}>
         <h2>Instruments for: {project?.name || "No Project Selected"}</h2>
 
@@ -77,6 +80,7 @@ const Instruments: React.FC = () => {
       </div>
       <footer>© 2025 DGMTS. All rights reserved.</footer>
     </div>
+    </>
   );
 };
 

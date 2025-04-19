@@ -131,7 +131,7 @@ footer {
 
 .submit-btn {
   padding: 12px;
-  background-color: #0056d2; /* Red button color */
+  background-color: #022d68; /* Red button color */
   color: white;
   font-weight: bold;
   border-radius: 8px;
@@ -144,10 +144,10 @@ footer {
   background-color: #0056d2; /* Darker red on hover */
 }
 .form-container {
-  max-width: 600px;
-  margin: 60px auto;
+  max-width: 500px;
+  margin: 40px auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 2px solid #160c0c;
   border-radius: 12px;
   background: #fff;
   display: flex;
@@ -198,4 +198,14 @@ html {
 .header {
   width: 100%;
   /* box-sizing: border-; */
+}
+.logo-bg {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30vw;
+  opacity: 0.10;
+  z-index: 0;
+  pointer-events: none;
 }

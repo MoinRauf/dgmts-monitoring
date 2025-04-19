@@ -40,11 +40,12 @@ const Projects: React.FC = () => {
   }, [selectedProject]);
 
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', padding: '0px' }}>
+    <>
       <HeaNavLogo />
+    <div style={{ fontFamily: 'Arial, sans-serif', padding: '0px' }}>
       <h2 style={{ textAlign: 'center', marginTop: '20px', color: '#333' }}>Project List</h2>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <TableContainer component={Paper} style={{ maxWidth: '96%', marginTop: '20px', border: '1px solid #000' }}>
+        <TableContainer component={Paper} style={{ maxWidth: '96%', marginTop: '20px', border: '1px solid #000',marginBottom:"12px" }}>
           <Table>
             <TableHead style={{ backgroundColor: '#f1f1f1' }}>
               <TableRow>
@@ -69,7 +70,7 @@ const Projects: React.FC = () => {
                       style={{
                         padding: '6px 12px',
                         fontSize: '14px',
-                        backgroundColor: '#3f51b5',
+                        backgroundColor: '#1e88e5',
                         color: 'white',
                       }}
                     >
@@ -83,7 +84,7 @@ const Projects: React.FC = () => {
                       style={{
                         padding: '6px 12px',
                         fontSize: '14px',
-                        backgroundColor: '#3f51b5',
+                        backgroundColor: '#1e88e5',
                         color: 'white',
                         marginLeft: '10px',
                       }}
@@ -99,6 +100,7 @@ const Projects: React.FC = () => {
         </TableContainer>
       </div>
     </div>
+    </>
   );
 };
 

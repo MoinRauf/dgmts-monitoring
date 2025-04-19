@@ -13,6 +13,7 @@ import Help from "../pages/Help";
 import SignIn from "../pages/SignIn";
 import ProjectForm from "../pages/ProjectForm";
 import DashBoard from "../pages/DashBoard";
+import MergeTracks from "../components/MergeTracks";
 
 
 const AppRoutes: React.FC = () => {
@@ -31,6 +32,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/export-data" element={<ExportData />} />
       <Route path="/help" element={<Help />} />
       <Route path="/DashBoard" element={<DashBoard />} />
+      <Route path="/MergeTracks" element={<MergeTracks />} />
 
     </Routes>
   );
