@@ -1,7 +1,12 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-const PressureGraph: React.FC<{ data: any }> = ({ data }) => {
+type PressureDataPoint = {
+  time: string | number;
+  pressure: number;
+};
+
+const PressureGraph: React.FC<{ data: PressureDataPoint[] }> = ({ data }) => {
   // Check if data is available before rendering
   if (!data || data.length === 0) {
     return <div>No data available for the pressure graph.</div>;
