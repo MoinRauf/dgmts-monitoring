@@ -3,7 +3,7 @@ import * as XLSX from "xlsx";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HeaNavLogo from "./HeaNavLogo";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface ExcelRow {
   [key: string]: string | number | null;
@@ -224,7 +224,7 @@ const GapRemoval: React.FC = () => {
       const headers = ["TIME"];
       const columns = headers1;
 
-      // Define diffPairs with proper typing
+      // Define difference calculations based on provided sequence with proper typing
       const diffPairs: DiffPair[] = [];
       let pairIndex = 1;
       for (let i = 1; i < columns.length; i += 6) {
@@ -456,20 +456,9 @@ const GapRemoval: React.FC = () => {
     border: "1px solid black",
   };
 
+  // Limit table columns to 4
   const displayedHeaders1 = headers1.slice(0, 4);
   const displayedDiffHeaders = diffHeaders.slice(0, 4);
-
-  const formatXAxis = (tick: string) => {
-    const date = new Date(tick);
-    if (isNaN(date.getTime())) return tick;
-    const dd = date.getUTCDate().toString().padStart(2, "0");
-    const mm = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-    const yyyy = date.getUTCFullYear();
-    const hh = date.getUTCHours().toString().padStart(2, "0");
-    const min = date.getUTCMinutes().toString().padStart(2, "0");
-    const sec = date.getUTCSeconds().toString().padStart(2, "0");
-    return `${dd}/${mm}/${yyyy} ${hh}:${min}:${sec}`;
-  };
 
   return (
     <>
@@ -550,7 +539,7 @@ const GapRemoval: React.FC = () => {
                   e.currentTarget.style.boxShadow = "none";
                 }}
               >
-                Download Processed File
+                Download Cleaned File
               </button>
               <button
                 style={{
@@ -632,25 +621,28 @@ const GapRemoval: React.FC = () => {
               </h3>
               <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={graphData}>
-                  <XAxis
-                    dataKey="TIME"
-                    tickFormatter={formatXAxis}
-                    interval="preserveStartEnd"
-                  />
-                  <YAxis domain={[-0.25, 0.25]} />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="TIME" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
                   <Line
                     type="monotone"
                     dataKey="Final Easting-01"
-                    stroke="#0000FF"
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
+                    stroke="#8884d8"
+                    name="Easting Difference"
                   />
                   <Line
                     type="monotone"
                     dataKey="Final Northing-01"
-                    stroke="#FF0000"
-                    dot={{ r: 4 }}
-                    activeDot={{ r: 6 }}
+                    stroke="#82ca9d"
+                    name="Northing Difference"
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="Final Height-01"
+                    stroke="#ffc107"
+                    name="Height Difference"
                   />
                 </LineChart>
               </ResponsiveContainer>
