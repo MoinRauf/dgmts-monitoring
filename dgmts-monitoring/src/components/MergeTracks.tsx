@@ -217,7 +217,8 @@ const TrackMerger: React.FC = () => {
             cursor: "pointer",
           }}
         >
-          Remove Gaps - Click the Button Below
+          Proceed to Gap Removal
+
         </button>
       </div>
     </>
