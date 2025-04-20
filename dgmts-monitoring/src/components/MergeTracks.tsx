@@ -218,7 +218,6 @@ const TrackMerger: React.FC = () => {
           }}
         >
           Proceed to Gap Removal
-
         </button>
       </div>
     </>
