@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HeaNavLogo from "./HeaNavLogo";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { Brush } from "recharts";
 
 interface ExcelRow {
   [key: string]: string | number | null;
@@ -46,6 +47,7 @@ const GapRemoval: React.FC = () => {
   const [diffData, setDiffData] = useState<ExcelRow[]>([]);
   const [diffHeaders, setDiffHeaders] = useState<string[]>([]);
   const [graphData, setGraphData] = useState<ExcelRow[]>([]);
+  const [brushDomain] = useState<[string, string] | null>(null);  
   const [loading, setLoading] = useState<LoadingState>({
     file1: false,
     diffFile: false,
@@ -215,15 +217,15 @@ const GapRemoval: React.FC = () => {
       });
       return;
     }
-
+  
     setLoading((prev) => ({ ...prev, diffFile: true }));
     setError((prev) => ({ ...prev, diffFile: null }));
-
+  
     try {
       const differences: ExcelRow[] = [];
-      const headers = ["TIME"];
+      const headers: string[] = ["TIME"];
       const columns = headers1;
-
+  
       // Define difference calculations based on provided sequence with proper typing
       const diffPairs: DiffPair[] = [];
       let pairIndex = 1;
@@ -246,16 +248,23 @@ const GapRemoval: React.FC = () => {
               name: `Final Height-${pairIndex.toString().padStart(2, "0")}`,
             },
           });
+          // Add headers: actual values for colA, colB and the computed difference for each measurement
           headers.push(
+            `Easting A (${columns[i]})`,
+            `Easting B (${columns[i + 1]})`,
             `Final Easting-${pairIndex.toString().padStart(2, "0")}`,
+            `Northing A (${columns[i + 2]})`,
+            `Northing B (${columns[i + 3]})`,
             `Final Northing-${pairIndex.toString().padStart(2, "0")}`,
+            `Height A (${columns[i + 4]})`,
+            `Height B (${columns[i + 5]})`,
             `Final Height-${pairIndex.toString().padStart(2, "0")}`
           );
           pairIndex++;
         }
       }
-
-      // Calculate differences
+  
+      // Calculate values and differences
       data1.forEach((row) => {
         const diffRow: ExcelRow = { TIME: row.TIME };
         diffPairs.forEach((pair) => {
@@ -265,14 +274,22 @@ const GapRemoval: React.FC = () => {
           const northingB = Number(row[pair.northing.colB]) || 0;
           const heightA = Number(row[pair.height.colA]) || 0;
           const heightB = Number(row[pair.height.colB]) || 0;
-
+  
+          diffRow[`Easting A (${pair.easting.colA})`] = eastingA;
+          diffRow[`Easting B (${pair.easting.colB})`] = eastingB;
           diffRow[pair.easting.name] = eastingA - eastingB;
+  
+          diffRow[`Northing A (${pair.northing.colA})`] = northingA;
+          diffRow[`Northing B (${pair.northing.colB})`] = northingB;
           diffRow[pair.northing.name] = northingA - northingB;
+  
+          diffRow[`Height A (${pair.height.colA})`] = heightA;
+          diffRow[`Height B (${pair.height.colB})`] = heightB;
           diffRow[pair.height.name] = heightA - heightB;
         });
         differences.push(diffRow);
       });
-
+  
       setDiffHeaders(headers);
       setDiffData(differences);
       downloadSingleFile(differences, "Differences", "differences.xlsx");
@@ -594,61 +611,91 @@ const GapRemoval: React.FC = () => {
         </div>
 
         <div style={sectionStyle}>
-          <h2 style={subHeadingStyle}>Upload Differences File for Visualization</h2>
-          <input
-            type="file"
-            accept=".xlsx,.xls"
-            onChange={handleGraphFileUpload}
-            style={inputStyle}
-            onFocus={(e) => (e.target.style.borderColor = "#4CAF50")}
-            onBlur={(e) => (e.target.style.borderColor = "#e2e8f0")}
-          />
-          {error.graphFile && (
-            <p style={{ color: "#e53e3e", margin: "10px 0" }}>
-              {error.graphFile}
-            </p>
-          )}
-          {loading.graphFile && (
-            <p style={{ color: "#4a5568", margin: "10px 0" }}>
-              Loading graph file...
-            </p>
-          )}
+  <h2 style={subHeadingStyle}>Upload Differences File for Visualization</h2>
+  <input
+    type="file"
+    accept=".xlsx,.xls"
+    onChange={handleGraphFileUpload}
+    style={inputStyle}
+    onFocus={(e) => (e.target.style.borderColor = "#4CAF50")}
+    onBlur={(e) => (e.target.style.borderColor = "#e2e8f0")}
+  />
+  {error.graphFile && (
+    <p style={{ color: "#e53e3e", margin: "10px 0" }}>
+      {error.graphFile}
+    </p>
+  )}
+  {loading.graphFile && (
+    <p style={{ color: "#4a5568", margin: "10px 0" }}>
+      Loading graph file...
+    </p>
+  )}
 
-          {graphData.length > 0 && (
-            <div>
-              <h3 style={{ ...subHeadingStyle, fontSize: "20px" }}>
-                Final-01 Visualization
-              </h3>
-              <ResponsiveContainer width="100%" height={400}>
-                <LineChart data={graphData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="TIME" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="Final Easting-01"
-                    stroke="#8884d8"
-                    name="Easting Difference"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="Final Northing-01"
-                    stroke="#82ca9d"
-                    name="Northing Difference"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="Final Height-01"
-                    stroke="#ffc107"
-                    name="Height Difference"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          )}
-        </div>
+  {graphData.length > 0 && (
+    <div>
+      <h3 style={{ ...subHeadingStyle, fontSize: "20px" }}>
+        TK2-08 - Height (in)
+      </h3>
+
+      {/* Chart 1: TK2-08B Height */}
+      <ResponsiveContainer width="100%" height={200}>
+        <LineChart
+          data={graphData}
+          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="Date"
+            domain={brushDomain ? [brushDomain[0], brushDomain[1]] : ['auto', 'auto']}
+          />
+          <YAxis domain={[-1, 1]} label={{ value: "TK2-08B - Height", angle: -90, position: "insideLeft" }} />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="Height B (LBN-TP-TK2-08B - Height)"
+            stroke="#ffc107"
+            name="LBN-TP-TK2-08B - Height"
+          />
+          <Brush
+            dataKey="Date"
+            height={30}
+            stroke="#8884d8"
+            />
+        </LineChart>
+      </ResponsiveContainer>
+
+      {/* Chart 2: TK2-08A Height */}
+      <ResponsiveContainer width="100%" height={200}>
+        <LineChart
+          data={graphData}
+          margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis
+            dataKey="Date"
+            domain={brushDomain ? [brushDomain[0], brushDomain[1]] : ['auto', 'auto']}
+            label={{ value: "2025", position: "insideBottom", offset: -5 }}
+          />
+          <YAxis domain={[-1, 1]} label={{ value: "TK2-08A - Height", angle: -90, position: "insideLeft" }} />
+          <Tooltip />
+          <Legend />
+          <Line
+            type="monotone"
+            dataKey="Height A (LBN-TP-TK2-08A - Height)"
+            stroke="#8884d8"
+            name="LBN-TP-TK2-08A - Height"
+          />
+          <Brush
+            dataKey="Date"
+            height={30}
+            stroke="#8884d8"
+            />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  )}
+</div>
       </div>
     </>
   );
