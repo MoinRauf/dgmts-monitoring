@@ -235,30 +235,30 @@ const GapRemoval: React.FC = () => {
             easting: {
               colA: columns[i],
               colB: columns[i + 1],
-              name: `Final Easting-${pairIndex.toString().padStart(2, "0")}`,
+              name: `Difference Easting-${pairIndex.toString().padStart(2, "0")}`,
             },
             northing: {
               colA: columns[i + 2],
               colB: columns[i + 3],
-              name: `Final Northing-${pairIndex.toString().padStart(2, "0")}`,
+              name: `Difference Northing-${pairIndex.toString().padStart(2, "0")}`,
             },
             height: {
               colA: columns[i + 4],
               colB: columns[i + 5],
-              name: `Final Height-${pairIndex.toString().padStart(2, "0")}`,
+              name: `Difference Height-${pairIndex.toString().padStart(2, "0")}`,
             },
           });
           // Add headers: actual values for colA, colB and the computed difference for each measurement
           headers.push(
             `Easting A (${columns[i]})`,
             `Easting B (${columns[i + 1]})`,
-            `Final Easting-${pairIndex.toString().padStart(2, "0")}`,
+            `Difference Easting-${pairIndex.toString().padStart(2, "0")}`,
             `Northing A (${columns[i + 2]})`,
             `Northing B (${columns[i + 3]})`,
-            `Final Northing-${pairIndex.toString().padStart(2, "0")}`,
+            `Difference Northing-${pairIndex.toString().padStart(2, "0")}`,
             `Height A (${columns[i + 4]})`,
             `Height B (${columns[i + 5]})`,
-            `Final Height-${pairIndex.toString().padStart(2, "0")}`
+            `Difference Height-${pairIndex.toString().padStart(2, "0")}`
           );
           pairIndex++;
         }
