@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+// import { forwardRef, useImperativeHandle } from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import HeaNavLogo from "./HeaNavLogo";
@@ -16,6 +17,16 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import html2canvas from "html2canvas";
 
 const GapRemoval: React.FC = () => {
+  //double click logic-start
+  const processSaveRef = useRef<HTMLButtonElement>(null);
+  const handleMergeClick = () => {
+    processSaveRef.current?.click(); // simulate click
+  };
+  //double click logic end
+
+  //mergertracks
+
+  //mergertracks
   const [selectedColumn1, setSelectedColumn1] = useState<string>("placeholder");
   const [selectedColumn2, setSelectedColumn2] = useState<string>("placeholder");
   const [selectedColumn3, setSelectedColumn3] = useState<string>("placeholder");
@@ -230,7 +241,7 @@ const GapRemoval: React.FC = () => {
   return (
     <>
       <HeaNavLogo />
-      <TrackMerger />
+      <TrackMerger onMergeSave={handleMergeClick}  />
 
       <div
         style={{
@@ -248,7 +259,9 @@ const GapRemoval: React.FC = () => {
       >
         <button
           onClick={handleProcess}
+          ref={processSaveRef}
           style={{
+            display: "none", 
             backgroundColor: "#2563eb",
             color: "#ffffff",
             padding: "0.75rem 1.5rem",

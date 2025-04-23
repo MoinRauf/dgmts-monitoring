@@ -1,9 +1,14 @@
 import * as XLSX from "xlsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const TrackMerger: React.FC = () => {
+type Props = {
+  onMergeSave: () => void;
+};
+const TrackMerger: React.FC<Props> = ({ onMergeSave }) => {
+  useEffect(() => {
+    localStorage.clear(); // or removeItem("mergedExcelFile")
+  }, []);
   const [fileA, setFileA] = useState<File | null>(null);
   const [fileB, setFileB] = useState<File | null>(null);
 
@@ -137,6 +142,12 @@ const TrackMerger: React.FC = () => {
       toast.error("Error merging files");
       console.error(err);
     }
+
+    onMergeSave();
+    //  catch (err) {
+    //   toast.error("Error merging files");
+    //   console.error(err);
+    //  }
   };
 
   return (
@@ -231,6 +242,7 @@ const TrackMerger: React.FC = () => {
 
         <button
           onClick={handleMerge}
+          // onClick={onMergeSave}
           style={{
             width: "100%",
             padding: "0.75rem",
