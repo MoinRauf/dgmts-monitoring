@@ -1,15 +1,11 @@
 import * as XLSX from "xlsx";
 import React, { useState } from "react";
-
-import HeaNavLogo from "./HeaNavLogo";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 const TrackMerger: React.FC = () => {
   const [fileA, setFileA] = useState<File | null>(null);
   const [fileB, setFileB] = useState<File | null>(null);
-  const navigate = useNavigate();
 
   const readExcel = (file: File): Promise<(string | number | null)[][]> => {
     return new Promise((resolve, reject) => {
@@ -51,11 +47,13 @@ const TrackMerger: React.FC = () => {
     const dateObj = new Date(timeStr as string);
     if (isNaN(dateObj.getTime())) return null;
     const date = dateObj.toLocaleDateString("en-GB");
-    const hour = dateObj.getHours().toString().padStart(2, '0');
+    const hour = dateObj.getHours().toString().padStart(2, "0");
     return `${date} ${hour}:00`;
   };
 
-  const groupByDateHour = (data: (string | number | null)[][]): Map<string, (string | number | null)[][]> => {
+  const groupByDateHour = (
+    data: (string | number | null)[][]
+  ): Map<string, (string | number | null)[][]> => {
     const grouped = new Map<string, (string | number | null)[][]>();
     for (let i = 1; i < data.length; i++) {
       const row = data[i];
@@ -67,7 +65,9 @@ const TrackMerger: React.FC = () => {
     return grouped;
   };
 
-  const pickFirstValue = (rows: (string | number | null)[][]): (string | number | null)[] => {
+  const pickFirstValue = (
+    rows: (string | number | null)[][]
+  ): (string | number | null)[] => {
     const result: (string | number | null)[] = [rows[0][0]];
     const colCount = rows[0].length;
     for (let col = 1; col < colCount; col++) {
@@ -90,12 +90,17 @@ const TrackMerger: React.FC = () => {
       return;
     }
     try {
-      const [dataA, dataB] = await Promise.all([readExcel(fileA), readExcel(fileB)]);
+      const [dataA, dataB] = await Promise.all([
+        readExcel(fileA),
+        readExcel(fileB),
+      ]);
       const headerA = dataA[0];
       const headerB = dataB[0];
       const groupedA = groupByDateHour(dataA);
       const groupedB = groupByDateHour(dataB);
-      const allKeys = Array.from(new Set([...groupedA.keys(), ...groupedB.keys()])).sort();
+      const allKeys = Array.from(
+        new Set([...groupedA.keys(), ...groupedB.keys()])
+      ).sort();
 
       const finalData: (string | number | null)[][] = [];
 
@@ -109,8 +114,12 @@ const TrackMerger: React.FC = () => {
 
       for (const key of allKeys) {
         const row: (string | number | null)[] = [key];
-        const firstA = groupedA.get(key) ? pickFirstValue(groupedA.get(key)!) : Array(headerA.length).fill(null);
-        const firstB = groupedB.get(key) ? pickFirstValue(groupedB.get(key)!) : Array(headerB.length).fill(null);
+        const firstA = groupedA.get(key)
+          ? pickFirstValue(groupedA.get(key)!)
+          : Array(headerA.length).fill(null);
+        const firstB = groupedB.get(key)
+          ? pickFirstValue(groupedB.get(key)!)
+          : Array(headerB.length).fill(null);
         for (let i = 1; i < maxColumns; i++) {
           if (i < firstA.length) row.push(firstA[i]);
           if (i < firstB.length) row.push(firstB[i]);
@@ -118,13 +127,12 @@ const TrackMerger: React.FC = () => {
         finalData.push(row);
       }
 
-      // Convert final data to worksheet, then to base64 string, and store in localStorage
       const ws = XLSX.utils.aoa_to_sheet(finalData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Merged");
       const wbout = XLSX.write(wb, { bookType: "xlsx", type: "base64" });
       localStorage.setItem("mergedExcelFile", wbout);
-      toast.success("Merged successfully and saved to localStorage!");
+      toast.success("Saved after successful merge!");
     } catch (err) {
       toast.error("Error merging files");
       console.error(err);
@@ -133,38 +141,91 @@ const TrackMerger: React.FC = () => {
 
   return (
     <>
-      <HeaNavLogo />
       <ToastContainer />
       <div
         style={{
-          padding: "2rem",
-          maxWidth: "600px",
-          margin: "0 auto",
-          fontFamily: "Segoe UI, sans-serif",
-          backgroundColor: "#f9f9f9",
-          borderRadius: "10px",
-          boxShadow: "0 0 12px rgba(0, 0, 0, 0.1)",
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#f4f7fa",
+          fontFamily: "'Inter', sans-serif",
+          border: "4px solid black", // Adds a black border
+          margin: "10px",
+          padding: "10px",
         }}
       >
-        <h2 style={{ textAlign: "center", marginBottom: "2rem", color: "#333" }}>Track Merger</h2>
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "2rem",
+            color: "#1f2937",
+            fontWeight: "700",
+            fontSize: "1.5rem",
+          }}
+        >
+          Track Merger
+        </h2>
 
         <div style={{ marginBottom: "1.5rem" }}>
-          <label style={{ display: "block", marginBottom: "0.5rem" }}>Upload TKA File:</label>
+          <label
+            style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              fontWeight: "600",
+              color: "#1f2937",
+              fontSize: "0.9rem",
+            }}
+          >
+            Upload TKA File:
+          </label>
           <input
             type="file"
             accept=".xlsx, .xls, .csv"
             onChange={(e) => setFileA(e.target.files?.[0] || null)}
-            style={{ width: "100%", padding: "0.5rem" }}
+            style={{
+              width: "98%",
+              padding: "0.5rem",
+              border: "1px solid #d1d5db",
+              borderRadius: "0.375rem",
+              fontSize: "0.875rem",
+              color: "#374151",
+              backgroundColor: "#f9fafb",
+              outline: "none",
+              transition: "border-color 0.2s ease",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "#2563eb")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#d1d5db")}
           />
         </div>
 
         <div style={{ marginBottom: "2rem" }}>
-          <label style={{ display: "block", marginBottom: "0.5rem" }}>Upload TKB File :</label>
+          <label
+            style={{
+              display: "block",
+              marginBottom: "0.5rem",
+              fontWeight: "600",
+              color: "#1f2937",
+              fontSize: "0.9rem",
+            }}
+          >
+            Upload TKB File:
+          </label>
           <input
             type="file"
             accept=".xlsx, .xls, .csv"
             onChange={(e) => setFileB(e.target.files?.[0] || null)}
-            style={{ width: "100%", padding: "0.5rem" }}
+            style={{
+              width: "98%",
+              padding: "0.5rem",
+              border: "1px solid #d1d5db",
+              borderRadius: "0.375rem",
+              fontSize: "0.875rem",
+              color: "#374151",
+              backgroundColor: "#f9fafb",
+              outline: "none",
+              transition: "border-color 0.2s ease",
+            }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = "#2563eb")}
+            onBlur={(e) => (e.currentTarget.style.borderColor = "#d1d5db")}
           />
         </div>
 
@@ -173,32 +234,27 @@ const TrackMerger: React.FC = () => {
           style={{
             width: "100%",
             padding: "0.75rem",
-            backgroundColor: "#007bff",
-            color: "#fff",
+            backgroundColor: "#2563eb",
+            color: "#ffffff",
             border: "none",
-            borderRadius: "6px",
+            borderRadius: "0.375rem",
             fontSize: "1rem",
+            fontWeight: "500",
             cursor: "pointer",
             marginBottom: "1rem",
+            transition: "background-color 0.2s ease, transform 0.1s ease",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           }}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor = "#1d4ed8")
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = "#2563eb")
+          }
+          onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.98)")}
+          onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          Merge and Save to LocalStorage
-        </button>
-
-        <button
-          onClick={() => navigate("/GapRemoval")}
-          style={{
-            width: "100%",
-            padding: "0.75rem",
-            backgroundColor: "#28a745",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            fontSize: "1rem",
-            cursor: "pointer",
-          }}
-        >
-          Proceed to Gap Removal
+          Merge and Save
         </button>
       </div>
     </>
